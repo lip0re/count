@@ -9,47 +9,47 @@
 
 <div id="overlay" class="overlay">
 
-    <!-- Modo compact: fila simple sin círculo ni los 10 juegos -->
-    <div id="compact-row" class="compact-row is-hidden">
+    <!-- Modo !full: Letras más grandes -->
+    <div id="compact-row" class="compact-row">
         <div class="stat-block">
-            <div class="stat-value" data-field="wins">0</div>
+            <div class="stat-value big" data-field="wins">0</div>
             <div class="stat-label">Wins</div>
         </div>
         <div class="divider"></div>
         <div class="stat-block">
-            <div class="stat-value" data-field="losses">0</div>
+            <div class="stat-value big" data-field="losses">0</div>
             <div class="stat-label">Losses</div>
         </div>
         <div class="divider"></div>
         <div class="stat-block">
-            <div class="stat-value" data-field="winrate">0%</div>
+            <div class="stat-value big" data-field="winrate">0%</div>
             <div class="stat-label">Winrate</div>
         </div>
     </div>
 
-    <!-- Modo full: Círculo verde/rojo con Winrate + % adentro y W/L apiladas -->
-    <div id="circle-face" class="circle-face is-hidden">
-        <div class="win-circle" id="win-circle">
-            <span class="win-circle-text" id="win-circle-text">0%</span>
+    <!-- Modo !ult10: Stats compactas + 10 Círculos (mismo tamaño de caja) -->
+    <div id="last10-face" class="last10-face is-hidden">
+        <div class="last10-header">
+            <span class="streak-text" id="streak-text"></span>
         </div>
-        <div class="stacked-stats">
-            <div class="stat-block stacked">
+
+        <div class="last10-stats-row">
+            <div class="stat-block mini">
                 <div class="stat-value" data-field="wins">0</div>
                 <div class="stat-label">Wins</div>
             </div>
-            <div class="stat-block stacked">
+            <div class="divider mini"></div>
+            <div class="stat-block mini">
                 <div class="stat-value" data-field="losses">0</div>
                 <div class="stat-label">Losses</div>
             </div>
+            <div class="divider mini"></div>
+            <div class="stat-block mini">
+                <div class="stat-value" data-field="winrate">0%</div>
+                <div class="stat-label">Winrate</div>
+            </div>
         </div>
-    </div>
 
-    <!-- Modo !ult10: Desaparece el círculo, aparecen los 10 círculos pequeños + Encabezado -->
-    <div id="last10-face" class="last10-face is-hidden">
-        <div class="last10-header">
-            <span class="last10-title">Últimos 10 juegos</span>
-            <span class="streak-text" id="streak-text"></span>
-        </div>
         <div class="history-row" id="history-row"></div>
     </div>
 
@@ -58,10 +58,7 @@
 <script>
     const overlay = document.getElementById("overlay");
     const compactRow = document.getElementById("compact-row");
-    const circleFace = document.getElementById("circle-face");
     const last10Face = document.getElementById("last10-face");
-    const winCircle = document.getElementById("win-circle");
-    const winCircleText = document.getElementById("win-circle-text");
     const historyRow = document.getElementById("history-row");
     const streakText = document.getElementById("streak-text");
 
@@ -71,33 +68,20 @@
         document.querySelectorAll('[data-field="winrate"]').forEach(el => el.textContent = data.winrate + "%");
     }
 
-    function actualizarCirculo(data) {
-        const totalJuegos = data.wins + data.losses;
-        const winratePct = parseFloat(data.winrate) || 0;
-
-        if (totalJuegos === 0) {
-            winCircle.style.background = "conic-gradient(#4b5563 0% 100%)";
-        } else {
-            // Fondo de círculo dinámico Verde-Rojo basado en el % de Winrate
-            winCircle.style.background =
-                `conic-gradient(#34d399 0% ${winratePct}%, #f87171 ${winratePct}% 100%)`;
-        }
-
-        winCircleText.textContent = data.winrate + "%";
-    }
-
     function renderHistory(last10) {
+        if (!historyRow) return;
         historyRow.innerHTML = "";
 
-        // Rellena con espacios vacíos a la izquierda si hay menos de 10 partidas
-        const faltantes = 10 - last10.length;
+        const lista = Array.isArray(last10) ? last10 : [];
+        const faltantes = 10 - lista.length;
+
         for (let i = 0; i < faltantes; i++) {
             const dot = document.createElement("div");
             dot.className = "game-dot empty";
             historyRow.appendChild(dot);
         }
 
-        last10.forEach(resultado => {
+        lista.forEach(resultado => {
             const dot = document.createElement("div");
             dot.className = "game-dot " + (resultado === "win" ? "win" : "loss");
             dot.textContent = resultado === "win" ? "✓" : "✕";
@@ -106,9 +90,10 @@
     }
 
     function renderStreak(streak) {
+        if (!streakText) return;
         streakText.className = "streak-text";
         if (!streak || streak.count < 2) {
-            streakText.textContent = "Sin racha";
+            streakText.textContent = "";
             return;
         }
 
@@ -127,7 +112,6 @@
             const data = await res.json();
 
             actualizarValores(data);
-            actualizarCirculo(data);
             renderHistory(data.last10);
             renderStreak(data.streak);
         } catch (e) {
@@ -142,15 +126,11 @@
 
             overlay.classList.toggle("is-hidden", data.visible === false);
 
-            const esCompact = data.mode === "compact";
             const mostrarUlt10 = data.showLast10 === true;
 
-            // Compact: solo la fila simple, nunca círculo ni puntos
-            compactRow.classList.toggle("is-hidden", esCompact === false);
-
-            // Full vs Ult10: Círculo o los 10 puntos (nunca ambos al mismo tiempo)
-            circleFace.classList.toggle("is-hidden", esCompact || mostrarUlt10);
-            last10Face.classList.toggle("is-hidden", esCompact || !mostrarUlt10);
+            // Intercambia completamente las vistas para mantener la misma forma del recuadro
+            compactRow.classList.toggle("is-hidden", mostrarUlt10);
+            last10Face.classList.toggle("is-hidden", !mostrarUlt10);
         } catch (e) {
             console.error("Error al obtener /settings:", e);
         }
@@ -162,7 +142,7 @@
     }
 
     actualizarTodo();
-    setInterval(actualizarTodo, 1000); // Actualización cada 1 segundo
+    setInterval(actualizarTodo, 1000);
 </script>
 
 </body>

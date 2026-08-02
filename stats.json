@@ -1,4 +1,15 @@
 {
-  "wins": 0,
-  "losses": 0
+  "wins": 7,
+  "losses": 2,
+  "history": [
+    "win",
+    "win",
+    "loss",
+    "win",
+    "win",
+    "win",
+    "win",
+    "loss",
+    "win"
+  ]
 }

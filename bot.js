@@ -174,14 +174,15 @@ client.on("message", (channel, tags, message, self) => {
         }
     }
 
-    if (message === "!compact" && esAdmin) {
-        overlaySettings.mode = "compact";
-        client.say(channel, "📦 Overlay compacto activado");
+    if (message === "!full" && esAdmin) {
+    overlaySettings.showLast10 = false;
+    client.say(channel, "🖥️ Overlay en modo normal activado");
     }
 
-    if (message === "!full" && esAdmin) {
-        overlaySettings.mode = "full";
-        client.say(channel, "🖥️ Overlay completo activado");
+    if (message === "!compact" && esAdmin) {
+    overlaySettings.mode = "compact";
+    overlaySettings.showLast10 = false; // <-- AGREGAR ESTA LÍNEA
+    client.say(channel, "📦 Overlay compacto activado");
     }
 
     if (message === "!hide" && esAdmin) {
@@ -195,12 +196,7 @@ client.on("message", (channel, tags, message, self) => {
     }
 
     if (message === "!ult10" && esAdmin) {
-        overlaySettings.showLast10 = !overlaySettings.showLast10;
-        client.say(
-            channel,
-            overlaySettings.showLast10
-                ? "📊 Últimos 10 juegos visibles"
-                : "📊 Últimos 10 juegos ocultos"
-        );
+    overlaySettings.showLast10 = true;
+    client.say(channel, "📊 Mostrando los últimos 10 juegos.");
     }
 });
