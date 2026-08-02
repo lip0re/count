@@ -7,11 +7,13 @@ body {
 .overlay {
     display: flex;
     align-items: center;
+    justify-content: flex-end; /* Alinea los elementos a la derecha */
     gap: 25px;
     background: rgba(10, 10, 10, 0.92);
     padding: 15px 20px;
     border-radius: 18px;
     width: fit-content;
+    margin-left: auto; /* Empuja la caja hacia el borde derecho */
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
     transition: all 0.3s ease;
 }
