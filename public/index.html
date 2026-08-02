@@ -2,6 +2,7 @@
 <html>
 
 <head>
+    <meta charset="UTF-8">
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -11,47 +12,32 @@
 
     <!-- Círculo de Winrate -->
     <div class="circle-container">
-
         <div class="circle">
-
             <div class="percent" id="winrate">
                 0%
             </div>
-
             <div class="label">
                 WINRATE
             </div>
-
         </div>
-
     </div>
-
 
     <!-- Wins y Losses -->
     <div class="stats">
-
         <div class="stat win">
-
             <span>🏆 WINS</span>
             <strong id="wins">0</strong>
-
         </div>
-
 
         <div class="stat lose">
-
             <span>💀 LOSSES</span>
             <strong id="losses">0</strong>
-
         </div>
-
-
     </div>
-
 
 </div>
 
-
+<!-- Si tienes codigo en script.js, lo mantiene cargado -->
 <script src="script.js"></script>
 
 <script>
@@ -75,12 +61,13 @@
       if (winrateEl) winrateEl.innerText = stats.winrate + '%';
 
       // --- Aplicar Visibilidad (!hide / !show) ---
-      const container = document.getElementById('overlay-container'); // Cambia por el ID de tu contenedor principal
+      // Usamos 'overlay' que es el ID real de tu div principal
+      const container = document.getElementById('overlay'); 
       if (container) {
         if (settings.visible === false) {
           container.style.display = 'none';
         } else {
-          container.style.display = 'block';
+          container.style.display = ''; // Restaura el display por defecto del CSS (flex/block)
         }
 
         // --- Aplicar Modos (!compact / !full) ---
@@ -97,14 +84,6 @@
       console.error('Error al actualizar overlay:', error);
     }
   }
-
-  <!-- Asegúrate de tener id="overlay-container" en la etiqueta envolvente -->
-<div id="overlay-container">
-    <div>Victorias: <span id="wins">0</span></div>
-    <div>Derrotas: <span id="losses">0</span></div>
-    <div>Winrate: <span id="winrate">0%</span></div>
-</div>
-
 
   // Actualiza inmediatamente y luego cada 1 segundo
   actualizarOverlay();
