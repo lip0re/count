@@ -1,135 +1,149 @@
-body {
+* { box-sizing: border-box; }
+
+html, body {
     margin: 0;
+    padding: 0;
     background: transparent;
-    font-family: Arial, sans-serif;
+    font-family: 'Segoe UI', 'Arial', sans-serif;
+    overflow: hidden;
 }
 
-/* 1. La caja principal ahora tiene padding-left para reservar el espacio del círculo */
-.overlay {
-    position: relative;
-    display: flex;
-    align-items: center;
-    background: rgba(10, 10, 10, 0.92);
-    padding: 15px 20px 15px 160px; /* 160px a la izquierda para el espacio del círculo */
-    border-radius: 18px;
-    width: fit-content;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
-    transition: all 0.3s ease;
-}
-
-/* 2. El círculo se posiciona de forma absoluta fixed a la izquierda */
-.circle-container {
-    position: absolute;
-    left: 20px; /* Se ancla a la izquierda de la caja */
-    transition: opacity 0.3s ease, transform 0.3s ease;
-}
-
-.circle {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    background: conic-gradient(#00ff99 0%, #ff3355 0%);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    color: white;
-    position: relative;
-}
-
-/* Máscara Centro */
-.circle::before {
-    content: "";
-    position: absolute;
-    width: 90px;
-    height: 90px;
-    border-radius: 50%;
-    background: #111111;
-    z-index: 1;
-}
-
-.percent {
-    position: relative;
-    z-index: 2;
-    font-size: 31px;
-    font-weight: 900;
-    color: white;
-    text-shadow:
-        -2px -2px 0 #000,
-         2px -2px 0 #000,
-        -2px  2px 0 #000,
-         2px  2px 0 #000,
-         0 0 10px rgba(255,255,255,0.4);
-    letter-spacing: 1px;
-}
-
-.label {
-    position: relative;
-    z-index: 2;
-    font-size: 13px;
-    font-weight: 700;
-    color: #ffffff;
-    opacity: 0.85;
-    text-shadow: 1px 1px 3px #000;
-    letter-spacing: 2px;
-}
-
-/* =========================================
-   PANEL DERECHA (WINS Y LOSSES)
-   ========================================= */
-
-.stats {
-    display: flex;
+#overlay {
+    display: inline-flex;
     flex-direction: column;
     gap: 10px;
+    padding: 16px 20px;
+    background: rgba(15, 15, 20, 0.72);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    backdrop-filter: blur(6px);
+    color: #fff;
+    min-width: 320px;
+    transition: opacity 0.3s ease;
 }
 
-.stat {
-    background: #151515;
-    padding: 8px 20px;
-    border-radius: 10px;
-    min-width: 100px;
-    color: white;
-}
-
-.stat span {
-    display: block;
-    font-size: 13px;
-    color: #aaa;
-}
-
-.stat strong {
-    font-size: 28px;
-}
-
-/* COLORES */
-
-.win {
-    border-left: 4px solid #00ff99;
-}
-
-.lose {
-    border-left: 4px solid #ff3355;
-}
-
-/* =========================================
-   MODOS Y VISIBILIDAD
-   ========================================= */
-
-/* Ocultar overlay (!hide) */
-.hidden {
-    display: none !important;
-}
-
-/* Modo compacto (!compact): 
-   Quitamos el padding extra pero manteniendo las cajas en su posición */
-.overlay.compact {
-    padding-left: 20px; /* El fondo negro se encoge hacia la derecha */
-}
-
-.overlay.compact .circle-container {
-    opacity: 0;
-    pointer-events: none;
-    transform: scale(0.8);
+#overlay.hidden {
     display: none;
 }
+
+/* ===== Fila Wins - Losses - Winrate ===== */
+#stats-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+}
+
+.stat-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 60px;
+}
+
+.stat-value {
+    font-size: 26px;
+    font-weight: 800;
+    line-height: 1;
+}
+
+.stat-label {
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    opacity: 0.65;
+    margin-top: 4px;
+}
+
+#wins-value { color: #34d399; }
+#losses-value { color: #f87171; }
+#winrate-value { color: #facc15; }
+
+.divider {
+    width: 1px;
+    height: 34px;
+    background: rgba(255, 255, 255, 0.15);
+}
+
+/* ===== Últimos 10 juegos ===== */
+#last10-section {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+
+    /* Colapsa suavemente cuando el bot lo oculta con !ult10 */
+    max-height: 60px;
+    opacity: 1;
+    overflow: hidden;
+    transition: max-height 0.3s ease, opacity 0.3s ease, padding 0.3s ease, border 0.3s ease;
+}
+
+#last10-section.hidden {
+    max-height: 0;
+    opacity: 0;
+    padding-top: 0;
+    border-top: none;
+}
+
+#history-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.game-dot {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: bold;
+    flex-shrink: 0;
+}
+
+.game-dot.win {
+    background: rgba(52, 211, 153, 0.18);
+    border: 1.5px solid #34d399;
+    color: #34d399;
+}
+
+.game-dot.loss {
+    background: rgba(248, 113, 113, 0.18);
+    border: 1.5px solid #f87171;
+    color: #f87171;
+}
+
+.game-dot.empty {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1.5px dashed rgba(255, 255, 255, 0.2);
+}
+
+/* ===== Racha ===== */
+#streak-row {
+    text-align: center;
+    font-size: 13px;
+    font-weight: 600;
+    min-height: 16px;
+}
+
+#streak-row.win-streak { color: #34d399; }
+#streak-row.loss-streak { color: #f87171; }
+
+/* ===== Modo compacto ===== */
+#overlay.compact {
+    padding: 10px 14px;
+    min-width: 260px;
+    gap: 6px;
+}
+
+#overlay.compact .stat-value { font-size: 18px; }
+#overlay.compact .stat-label { font-size: 9px; }
+#overlay.compact .divider { height: 24px; }
+#overlay.compact #last10-section { max-height: 40px; padding-top: 6px; }
+#overlay.compact .game-dot { width: 16px; height: 16px; font-size: 9px; }
+#overlay.compact #streak-row { font-size: 11px; }
