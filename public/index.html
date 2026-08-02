@@ -98,6 +98,14 @@
     }
   }
 
+  <!-- Asegúrate de tener id="overlay-container" en la etiqueta envolvente -->
+<div id="overlay-container">
+    <div>Victorias: <span id="wins">0</span></div>
+    <div>Derrotas: <span id="losses">0</span></div>
+    <div>Winrate: <span id="winrate">0%</span></div>
+</div>
+
+
   // Actualiza inmediatamente y luego cada 1 segundo
   actualizarOverlay();
   setInterval(actualizarOverlay, 1000);
