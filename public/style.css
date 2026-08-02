@@ -4,29 +4,30 @@ body {
     font-family: Arial, sans-serif;
 }
 
+/* 1. La caja principal ahora tiene padding-left para reservar el espacio del círculo */
 .overlay {
+    position: relative;
     display: flex;
     align-items: center;
-    justify-content: flex-end; /* Alinea los elementos a la derecha */
-    gap: 25px;
     background: rgba(10, 10, 10, 0.92);
-    padding: 15px 20px;
+    padding: 15px 20px 15px 160px; /* 160px a la izquierda para el espacio del círculo */
     border-radius: 18px;
     width: fit-content;
-    margin-left: auto; /* Empuja la caja hacia el borde derecho */
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
     transition: all 0.3s ease;
 }
 
-/* =========================================
-   CIRCULO WINRATE (Diseño tipo Anillo/Dona)
-   ========================================= */
+/* 2. El círculo se posiciona de forma absoluta fixed a la izquierda */
+.circle-container {
+    position: absolute;
+    left: 20px; /* Se ancla a la izquierda de la caja */
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
 
 .circle {
     width: 120px;
     height: 120px;
     border-radius: 50%;
-    /* Gradient administrado en tiempo real por JS */
     background: conic-gradient(#00ff99 0%, #ff3355 0%);
     display: flex;
     flex-direction: column;
@@ -36,7 +37,7 @@ body {
     position: relative;
 }
 
-/* Máscara Centro: recorta el círculo para simular una dona */
+/* Máscara Centro */
 .circle::before {
     content: "";
     position: absolute;
@@ -120,12 +121,15 @@ body {
     display: none !important;
 }
 
-/* Modo compacto (!compact) */
-.overlay.compact .circle-container {
-    display: none;
+/* Modo compacto (!compact): 
+   Quitamos el padding extra pero manteniendo las cajas en su posición */
+.overlay.compact {
+    padding-left: 20px; /* El fondo negro se encoge hacia la derecha */
 }
 
-.overlay.compact {
-    gap: 10px;
-    padding: 10px 15px;
+.overlay.compact .circle-container {
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(0.8);
+    display: none;
 }
