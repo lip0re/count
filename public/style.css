@@ -26,7 +26,10 @@ body {
 
 }
 
-
+/* Ejemplo de cómo ocultar el winrate en modo compacto */
+#overlay-container.compact .winrate-box {
+  display: none;
+}
 
 /* CIRCULO WINRATE */
 

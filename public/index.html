@@ -57,31 +57,48 @@
 <script>
   async function actualizarOverlay() {
     try {
-      // Pedimos las estadísticas actualizadas al servidor
+      // 1. Obtener Wins y Losses
       const resStats = await fetch('/stats');
       const stats = await resStats.json();
 
-      // Pedimos la configuración (modo compacto/full/oculto)
+      // 2. Obtener Ajustes de Visibilidad y Modo (!hide, !show, !compact, !full)
       const resSettings = await fetch('/settings');
       const settings = await resSettings.json();
 
-      // Actualizamos los elementos en el HTML por sus IDs
-      document.getElementById('wins').innerText = stats.wins;
-      document.getElementById('losses').innerText = stats.losses;
-      document.getElementById('winrate').innerText = stats.winrate + '%';
+      // --- Actualizar valores en pantalla ---
+      const winsEl = document.getElementById('wins');
+      const lossesEl = document.getElementById('losses');
+      const winrateEl = document.getElementById('winrate');
 
-      // Visibilidad
-      const container = document.getElementById('overlay-container');
+      if (winsEl) winsEl.innerText = stats.wins;
+      if (lossesEl) lossesEl.innerText = stats.losses;
+      if (winrateEl) winrateEl.innerText = stats.winrate + '%';
+
+      // --- Aplicar Visibilidad (!hide / !show) ---
+      const container = document.getElementById('overlay-container'); // Cambia por el ID de tu contenedor principal
       if (container) {
-        container.style.display = settings.visible ? 'block' : 'none';
+        if (settings.visible === false) {
+          container.style.display = 'none';
+        } else {
+          container.style.display = 'block';
+        }
+
+        // --- Aplicar Modos (!compact / !full) ---
+        if (settings.mode === 'compact') {
+          container.classList.add('compact');
+          container.classList.remove('full');
+        } else {
+          container.classList.add('full');
+          container.classList.remove('compact');
+        }
       }
 
     } catch (error) {
-      console.error('Error actualizando el overlay:', error);
+      console.error('Error al actualizar overlay:', error);
     }
   }
 
-  // Ejecutamos la función inmediatamente y luego cada 1 segundo (1000 ms)
+  // Actualiza inmediatamente y luego cada 1 segundo
   actualizarOverlay();
   setInterval(actualizarOverlay, 1000);
 </script>
