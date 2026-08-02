@@ -8,37 +8,82 @@
 <body>
 
 <div id="overlay" class="overlay">
-    <div class="stats-row">
+
+    <!-- Modo compact: fila simple, siempre sin círculo ni puntos -->
+    <div id="compact-row" class="compact-row is-hidden">
         <div class="stat-block">
-            <div class="stat-value" id="wins-value">0</div>
+            <div class="stat-value" data-field="wins">0</div>
             <div class="stat-label">Wins</div>
         </div>
         <div class="divider"></div>
         <div class="stat-block">
-            <div class="stat-value" id="losses-value">0</div>
+            <div class="stat-value" data-field="losses">0</div>
             <div class="stat-label">Losses</div>
         </div>
         <div class="divider"></div>
         <div class="stat-block">
-            <div class="stat-value" id="winrate-value">0%</div>
+            <div class="stat-value" data-field="winrate">0%</div>
             <div class="stat-label">Winrate</div>
         </div>
     </div>
 
-    <div id="last10-section" class="last10-section">
-        <div class="history-row" id="history-row"></div>
-        <div class="streak-row" id="streak-row"></div>
+    <!-- Modo full, cara A: círculo de winrate + wins/losses apilados -->
+    <div id="circle-face" class="circle-face is-hidden">
+        <div class="win-circle" id="win-circle">
+            <span class="win-circle-text" id="win-circle-text">0%</span>
+        </div>
+        <div class="stacked-stats">
+            <div class="stat-block stacked">
+                <div class="stat-value" data-field="wins">0</div>
+                <div class="stat-label">Wins</div>
+            </div>
+            <div class="stat-block stacked">
+                <div class="stat-value" data-field="losses">0</div>
+                <div class="stat-label">Losses</div>
+            </div>
+        </div>
     </div>
+
+    <!-- Modo full, cara B: últimos 10 juegos -->
+    <div id="last10-face" class="last10-face is-hidden">
+        <div class="last10-header">
+            <span class="last10-title">Últimos 10 juegos</span>
+            <span class="streak-text" id="streak-text"></span>
+        </div>
+        <div class="history-row" id="history-row"></div>
+    </div>
+
 </div>
 
 <script>
     const overlay = document.getElementById("overlay");
-    const winsValue = document.getElementById("wins-value");
-    const lossesValue = document.getElementById("losses-value");
-    const winrateValue = document.getElementById("winrate-value");
-    const last10Section = document.getElementById("last10-section");
+    const compactRow = document.getElementById("compact-row");
+    const circleFace = document.getElementById("circle-face");
+    const last10Face = document.getElementById("last10-face");
+    const winCircle = document.getElementById("win-circle");
+    const winCircleText = document.getElementById("win-circle-text");
     const historyRow = document.getElementById("history-row");
-    const streakRow = document.getElementById("streak-row");
+    const streakText = document.getElementById("streak-text");
+
+    function actualizarValores(data) {
+        document.querySelectorAll('[data-field="wins"]').forEach(el => el.textContent = data.wins);
+        document.querySelectorAll('[data-field="losses"]').forEach(el => el.textContent = data.losses);
+        document.querySelectorAll('[data-field="winrate"]').forEach(el => el.textContent = data.winrate + "%");
+    }
+
+    function actualizarCirculo(data) {
+        const totalJuegos = data.wins + data.losses;
+        const winratePct = parseFloat(data.winrate) || 0;
+
+        if (totalJuegos === 0) {
+            winCircle.style.background = "conic-gradient(#4b5563 0% 100%)";
+        } else {
+            winCircle.style.background =
+                `conic-gradient(#34d399 0% ${winratePct}%, #f87171 ${winratePct}% 100%)`;
+        }
+
+        winCircleText.textContent = data.winrate + "%";
+    }
 
     function renderHistory(last10) {
         historyRow.innerHTML = "";
@@ -60,18 +105,18 @@
     }
 
     function renderStreak(streak) {
-        streakRow.className = "streak-row";
+        streakText.className = "streak-text";
         if (!streak || streak.count < 2) {
-            streakRow.textContent = "";
+            streakText.textContent = "Sin racha";
             return;
         }
 
         if (streak.tipo === "win") {
-            streakRow.textContent = `🔥 ${streak.count} victorias seguidas`;
-            streakRow.classList.add("win-streak");
+            streakText.textContent = `🔥 ${streak.count} victorias seguidas`;
+            streakText.classList.add("win-streak");
         } else {
-            streakRow.textContent = `❄️ ${streak.count} derrotas seguidas`;
-            streakRow.classList.add("loss-streak");
+            streakText.textContent = `❄️ ${streak.count} derrotas seguidas`;
+            streakText.classList.add("loss-streak");
         }
     }
 
@@ -80,10 +125,8 @@
             const res = await fetch("/stats");
             const data = await res.json();
 
-            winsValue.textContent = data.wins;
-            lossesValue.textContent = data.losses;
-            winrateValue.textContent = data.winrate + "%";
-
+            actualizarValores(data);
+            actualizarCirculo(data);
             renderHistory(data.last10);
             renderStreak(data.streak);
         } catch (e) {
@@ -96,9 +139,17 @@
             const res = await fetch("/settings");
             const data = await res.json();
 
-            overlay.classList.toggle("compact", data.mode === "compact");
             overlay.classList.toggle("is-hidden", data.visible === false);
-            last10Section.classList.toggle("is-hidden", data.showLast10 !== true);
+
+            const esCompact = data.mode === "compact";
+            const mostrarUlt10 = data.showLast10 === true;
+
+            // Compact: solo la fila simple, nunca círculo ni puntos
+            compactRow.classList.toggle("is-hidden", esCompact === false);
+
+            // Full: círculo o los 10 puntos, nunca ambos, y nunca si es compact
+            circleFace.classList.toggle("is-hidden", esCompact || mostrarUlt10);
+            last10Face.classList.toggle("is-hidden", esCompact || !mostrarUlt10);
         } catch (e) {
             console.error("Error al obtener /settings:", e);
         }

@@ -8,25 +8,40 @@ html, body {
     overflow: hidden;
 }
 
+/* Fondo sólido y oscuro (ya no transparente) */
+:root {
+    --bg-color: #14141a;
+}
+
 .overlay {
     display: inline-flex;
     flex-direction: column;
     gap: 10px;
-    padding: 16px 20px;
-    background: rgba(15, 15, 20, 0.72);
+    padding: 18px 22px;
+    background: var(--bg-color);
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 14px;
-    backdrop-filter: blur(6px);
     color: #fff;
-    min-width: 320px;
+    min-width: 300px;
 }
 
-/* ===== Fila Wins - Losses - Winrate ===== */
-.stats-row {
+.overlay.is-hidden {
+    display: none;
+}
+
+/* =========================================================
+   Modo compact: fila simple Wins - Losses - Winrate
+   (sin círculo, sin los 10 puntos, siempre)
+   ========================================================= */
+.compact-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 18px;
+}
+
+.compact-row.is-hidden {
+    display: none;
 }
 
 .stat-block {
@@ -36,8 +51,13 @@ html, body {
     min-width: 60px;
 }
 
+.stat-block.stacked {
+    align-items: flex-start;
+    min-width: 0;
+}
+
 .stat-value {
-    font-size: 26px;
+    font-size: 24px;
     font-weight: 800;
     line-height: 1;
 }
@@ -50,24 +70,103 @@ html, body {
     margin-top: 4px;
 }
 
-#wins-value { color: #34d399; }
-#losses-value { color: #f87171; }
-#winrate-value { color: #facc15; }
+[data-field="wins"] { color: #34d399; }
+[data-field="losses"] { color: #f87171; }
+[data-field="winrate"] { color: #facc15; }
 
 .divider {
     width: 1px;
-    height: 34px;
+    height: 30px;
     background: rgba(255, 255, 255, 0.15);
 }
 
-/* ===== Últimos 10 juegos ===== */
-.last10-section {
+/* =========================================================
+   Modo full (cara A): círculo de winrate + wins/losses apilados
+   ========================================================= */
+.circle-face {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 22px;
+}
+
+.circle-face.is-hidden {
+    display: none;
+}
+
+.win-circle {
+    position: relative;
+    width: 94px;
+    height: 94px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    background: conic-gradient(#4b5563 0% 100%); /* se sobreescribe por JS */
+}
+
+.win-circle::after {
+    content: "";
+    position: absolute;
+    top: 11px;
+    left: 11px;
+    right: 11px;
+    bottom: 11px;
+    border-radius: 50%;
+    background: var(--bg-color);
+}
+
+.win-circle-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 19px;
+    font-weight: 800;
+    color: #fff;
+    z-index: 1;
+}
+
+.stacked-stats {
     display: flex;
     flex-direction: column;
-    gap: 6px;
-    padding-top: 10px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    gap: 12px;
 }
+
+/* =========================================================
+   Modo full (cara B): últimos 10 juegos
+   ========================================================= */
+.last10-face {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.last10-face.is-hidden {
+    display: none;
+}
+
+.last10-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.last10-title {
+    font-size: 10px;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    opacity: 0.55;
+}
+
+.streak-text {
+    font-size: 11px;
+    font-weight: 700;
+    opacity: 0.9;
+}
+
+.streak-text.win-streak { color: #34d399; }
+.streak-text.loss-streak { color: #f87171; }
 
 .history-row {
     display: flex;
@@ -103,45 +202,4 @@ html, body {
 .game-dot.empty {
     background: rgba(255, 255, 255, 0.05);
     border: 1.5px dashed rgba(255, 255, 255, 0.2);
-}
-
-/* ===== Racha ===== */
-.streak-row {
-    text-align: center;
-    font-size: 13px;
-    font-weight: 600;
-    min-height: 16px;
-}
-
-.streak-row.win-streak { color: #34d399; }
-.streak-row.loss-streak { color: #f87171; }
-
-/* =========================================================
-   Modo compacto
-   Encoge todo (incluido wins/losses y el círculo de últimos 10),
-   pero deja ambos bloques visibles.
-   ========================================================= */
-.overlay.compact {
-    padding: 10px 14px;
-    min-width: 260px;
-    gap: 6px;
-}
-
-.overlay.compact .stat-value { font-size: 18px; }
-.overlay.compact .stat-label { font-size: 9px; }
-.overlay.compact .divider { height: 24px; }
-.overlay.compact .last10-section { padding-top: 6px; gap: 4px; }
-.overlay.compact .game-dot { width: 15px; height: 15px; font-size: 8px; border-width: 1px; }
-.overlay.compact .streak-row { font-size: 10px; min-height: 12px; }
-
-/* =========================================================
-   Estados ocultos (van al final para que ganen SIEMPRE,
-   sea que el overlay esté en modo full o compact)
-   ========================================================= */
-.overlay.is-hidden {
-    display: none;
-}
-
-.last10-section.is-hidden {
-    display: none;
 }
