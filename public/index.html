@@ -54,6 +54,38 @@
 
 <script src="script.js"></script>
 
+<script>
+  async function actualizarOverlay() {
+    try {
+      // Pedimos las estadísticas actualizadas al servidor
+      const resStats = await fetch('/stats');
+      const stats = await resStats.json();
+
+      // Pedimos la configuración (modo compacto/full/oculto)
+      const resSettings = await fetch('/settings');
+      const settings = await resSettings.json();
+
+      // Actualizamos los elementos en el HTML por sus IDs
+      document.getElementById('wins').innerText = stats.wins;
+      document.getElementById('losses').innerText = stats.losses;
+      document.getElementById('winrate').innerText = stats.winrate + '%';
+
+      // Visibilidad
+      const container = document.getElementById('overlay-container');
+      if (container) {
+        container.style.display = settings.visible ? 'block' : 'none';
+      }
+
+    } catch (error) {
+      console.error('Error actualizando el overlay:', error);
+    }
+  }
+
+  // Ejecutamos la función inmediatamente y luego cada 1 segundo (1000 ms)
+  actualizarOverlay();
+  setInterval(actualizarOverlay, 1000);
+</script>
+
 </body>
 
 </html>
