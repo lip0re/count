@@ -9,7 +9,7 @@
 
 <div id="overlay" class="overlay">
 
-    <!-- Modo compact: fila simple, siempre sin círculo ni puntos -->
+    <!-- Modo compact: fila simple sin círculo ni los 10 juegos -->
     <div id="compact-row" class="compact-row is-hidden">
         <div class="stat-block">
             <div class="stat-value" data-field="wins">0</div>
@@ -27,7 +27,7 @@
         </div>
     </div>
 
-    <!-- Modo full, cara A: círculo de winrate + wins/losses apilados -->
+    <!-- Modo full: Círculo verde/rojo con Winrate + % adentro y W/L apiladas -->
     <div id="circle-face" class="circle-face is-hidden">
         <div class="win-circle" id="win-circle">
             <span class="win-circle-text" id="win-circle-text">0%</span>
@@ -44,7 +44,7 @@
         </div>
     </div>
 
-    <!-- Modo full, cara B: últimos 10 juegos -->
+    <!-- Modo !ult10: Desaparece el círculo, aparecen los 10 círculos pequeños + Encabezado -->
     <div id="last10-face" class="last10-face is-hidden">
         <div class="last10-header">
             <span class="last10-title">Últimos 10 juegos</span>
@@ -78,6 +78,7 @@
         if (totalJuegos === 0) {
             winCircle.style.background = "conic-gradient(#4b5563 0% 100%)";
         } else {
+            // Fondo de círculo dinámico Verde-Rojo basado en el % de Winrate
             winCircle.style.background =
                 `conic-gradient(#34d399 0% ${winratePct}%, #f87171 ${winratePct}% 100%)`;
         }
@@ -112,10 +113,10 @@
         }
 
         if (streak.tipo === "win") {
-            streakText.textContent = `🔥 ${streak.count} victorias seguidas`;
+            streakText.textContent = `🔥 ${streak.count} seguidas`;
             streakText.classList.add("win-streak");
         } else {
-            streakText.textContent = `❄️ ${streak.count} derrotas seguidas`;
+            streakText.textContent = `❄️ ${streak.count} seguidas`;
             streakText.classList.add("loss-streak");
         }
     }
@@ -147,7 +148,7 @@
             // Compact: solo la fila simple, nunca círculo ni puntos
             compactRow.classList.toggle("is-hidden", esCompact === false);
 
-            // Full: círculo o los 10 puntos, nunca ambos, y nunca si es compact
+            // Full vs Ult10: Círculo o los 10 puntos (nunca ambos al mismo tiempo)
             circleFace.classList.toggle("is-hidden", esCompact || mostrarUlt10);
             last10Face.classList.toggle("is-hidden", esCompact || !mostrarUlt10);
         } catch (e) {
@@ -161,7 +162,7 @@
     }
 
     actualizarTodo();
-    setInterval(actualizarTodo, 3000);
+    setInterval(actualizarTodo, 1000); // Actualización cada 1 segundo
 </script>
 
 </body>

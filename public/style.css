@@ -8,21 +8,20 @@ html, body {
     overflow: hidden;
 }
 
-/* Fondo sólido y oscuro (ya no transparente) */
+/* Variable con el tono de fondo sólido oscuro */
 :root {
-    --bg-color: #14141a;
+    --bg-color: #0f1117;
 }
 
 .overlay {
     display: inline-flex;
     flex-direction: column;
-    gap: 10px;
-    padding: 18px 22px;
-    background: var(--bg-color);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 14px;
+    padding: 16px 20px;
+    background: var(--bg-color); /* Fondo oscuro no transparente */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
     color: #fff;
-    min-width: 300px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
 }
 
 .overlay.is-hidden {
@@ -30,8 +29,7 @@ html, body {
 }
 
 /* =========================================================
-   Modo compact: fila simple Wins - Losses - Winrate
-   (sin círculo, sin los 10 puntos, siempre)
+   Modo compact: Fila simple Wins - Losses - Winrate
    ========================================================= */
 .compact-row {
     display: flex;
@@ -48,7 +46,7 @@ html, body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    min-width: 60px;
+    min-width: 55px;
 }
 
 .stat-block.stacked {
@@ -57,13 +55,13 @@ html, body {
 }
 
 .stat-value {
-    font-size: 24px;
+    font-size: 22px;
     font-weight: 800;
     line-height: 1;
 }
 
 .stat-label {
-    font-size: 11px;
+    font-size: 10px;
     letter-spacing: 1px;
     text-transform: uppercase;
     opacity: 0.65;
@@ -76,40 +74,42 @@ html, body {
 
 .divider {
     width: 1px;
-    height: 30px;
+    height: 28px;
     background: rgba(255, 255, 255, 0.15);
 }
 
 /* =========================================================
-   Modo full (cara A): círculo de winrate + wins/losses apilados
+   Modo full: Círculo con Winrate + Wins/Losses Apilados
    ========================================================= */
 .circle-face {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 22px;
+    gap: 20px;
 }
 
 .circle-face.is-hidden {
     display: none;
 }
 
+/* Círculo con borde dinámico verde-rojo */
 .win-circle {
     position: relative;
-    width: 94px;
-    height: 94px;
+    width: 86px;
+    height: 86px;
     border-radius: 50%;
     flex-shrink: 0;
-    background: conic-gradient(#4b5563 0% 100%); /* se sobreescribe por JS */
+    background: conic-gradient(#4b5563 0% 100%);
 }
 
+/* Centro oscuro del círculo */
 .win-circle::after {
     content: "";
     position: absolute;
-    top: 11px;
-    left: 11px;
-    right: 11px;
-    bottom: 11px;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
     border-radius: 50%;
     background: var(--bg-color);
 }
@@ -120,43 +120,46 @@ html, body {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 19px;
+    font-size: 18px;
     font-weight: 800;
     color: #fff;
     z-index: 1;
 }
 
+/* W/L una arriba de la otra */
 .stacked-stats {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
 }
 
 /* =========================================================
-   Modo full (cara B): últimos 10 juegos
+   Modo !ult10: Texto arriba en esquinas + 10 círculos pequeños
    ========================================================= */
 .last10-face {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 10px;
 }
 
 .last10-face.is-hidden {
     display: none;
 }
 
+/* Encabezado con esquinas opuestas */
 .last10-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 10px;
+    gap: 15px;
 }
 
 .last10-title {
     font-size: 10px;
     letter-spacing: 0.8px;
     text-transform: uppercase;
-    opacity: 0.55;
+    opacity: 0.5;
+    font-weight: 700;
 }
 
 .streak-text {
@@ -182,19 +185,19 @@ html, body {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: bold;
     flex-shrink: 0;
 }
 
 .game-dot.win {
-    background: rgba(52, 211, 153, 0.18);
+    background: rgba(52, 211, 153, 0.2);
     border: 1.5px solid #34d399;
     color: #34d399;
 }
 
 .game-dot.loss {
-    background: rgba(248, 113, 113, 0.18);
+    background: rgba(248, 113, 113, 0.2);
     border: 1.5px solid #f87171;
     color: #f87171;
 }
