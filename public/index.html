@@ -7,8 +7,8 @@
 </head>
 <body>
 
-<div id="overlay">
-    <div id="stats-row">
+<div id="overlay" class="overlay">
+    <div class="stats-row">
         <div class="stat-block">
             <div class="stat-value" id="wins-value">0</div>
             <div class="stat-label">Wins</div>
@@ -25,9 +25,9 @@
         </div>
     </div>
 
-    <div id="last10-section">
-        <div id="history-row"></div>
-        <div id="streak-row"></div>
+    <div id="last10-section" class="last10-section">
+        <div class="history-row" id="history-row"></div>
+        <div class="streak-row" id="streak-row"></div>
     </div>
 </div>
 
@@ -60,7 +60,7 @@
     }
 
     function renderStreak(streak) {
-        streakRow.className = "";
+        streakRow.className = "streak-row";
         if (!streak || streak.count < 2) {
             streakRow.textContent = "";
             return;
@@ -97,8 +97,8 @@
             const data = await res.json();
 
             overlay.classList.toggle("compact", data.mode === "compact");
-            overlay.classList.toggle("hidden", data.visible === false);
-            last10Section.classList.toggle("hidden", data.showLast10 !== true);
+            overlay.classList.toggle("is-hidden", data.visible === false);
+            last10Section.classList.toggle("is-hidden", data.showLast10 !== true);
         } catch (e) {
             console.error("Error al obtener /settings:", e);
         }

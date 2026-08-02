@@ -8,7 +8,7 @@ html, body {
     overflow: hidden;
 }
 
-#overlay {
+.overlay {
     display: inline-flex;
     flex-direction: column;
     gap: 10px;
@@ -19,15 +19,10 @@ html, body {
     backdrop-filter: blur(6px);
     color: #fff;
     min-width: 320px;
-    transition: opacity 0.3s ease;
-}
-
-#overlay.hidden {
-    display: none;
 }
 
 /* ===== Fila Wins - Losses - Winrate ===== */
-#stats-row {
+.stats-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -66,28 +61,15 @@ html, body {
 }
 
 /* ===== Últimos 10 juegos ===== */
-#last10-section {
+.last10-section {
     display: flex;
     flex-direction: column;
     gap: 6px;
     padding-top: 10px;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
-
-    /* Colapsa suavemente cuando el bot lo oculta con !ult10 */
-    max-height: 60px;
-    opacity: 1;
-    overflow: hidden;
-    transition: max-height 0.3s ease, opacity 0.3s ease, padding 0.3s ease, border 0.3s ease;
 }
 
-#last10-section.hidden {
-    max-height: 0;
-    opacity: 0;
-    padding-top: 0;
-    border-top: none;
-}
-
-#history-row {
+.history-row {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -124,26 +106,42 @@ html, body {
 }
 
 /* ===== Racha ===== */
-#streak-row {
+.streak-row {
     text-align: center;
     font-size: 13px;
     font-weight: 600;
     min-height: 16px;
 }
 
-#streak-row.win-streak { color: #34d399; }
-#streak-row.loss-streak { color: #f87171; }
+.streak-row.win-streak { color: #34d399; }
+.streak-row.loss-streak { color: #f87171; }
 
-/* ===== Modo compacto ===== */
-#overlay.compact {
+/* =========================================================
+   Modo compacto
+   Encoge todo (incluido wins/losses y el círculo de últimos 10),
+   pero deja ambos bloques visibles.
+   ========================================================= */
+.overlay.compact {
     padding: 10px 14px;
     min-width: 260px;
     gap: 6px;
 }
 
-#overlay.compact .stat-value { font-size: 18px; }
-#overlay.compact .stat-label { font-size: 9px; }
-#overlay.compact .divider { height: 24px; }
-#overlay.compact #last10-section { max-height: 40px; padding-top: 6px; }
-#overlay.compact .game-dot { width: 16px; height: 16px; font-size: 9px; }
-#overlay.compact #streak-row { font-size: 11px; }
+.overlay.compact .stat-value { font-size: 18px; }
+.overlay.compact .stat-label { font-size: 9px; }
+.overlay.compact .divider { height: 24px; }
+.overlay.compact .last10-section { padding-top: 6px; gap: 4px; }
+.overlay.compact .game-dot { width: 15px; height: 15px; font-size: 8px; border-width: 1px; }
+.overlay.compact .streak-row { font-size: 10px; min-height: 12px; }
+
+/* =========================================================
+   Estados ocultos (van al final para que ganen SIEMPRE,
+   sea que el overlay esté en modo full o compact)
+   ========================================================= */
+.overlay.is-hidden {
+    display: none;
+}
+
+.last10-section.is-hidden {
+    display: none;
+}
