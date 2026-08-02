@@ -3,135 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <title>Overlay Stats</title>
-<style>
-    * { box-sizing: border-box; }
-
-    html, body {
-        margin: 0;
-        padding: 0;
-        background: transparent;
-        font-family: 'Segoe UI', 'Arial', sans-serif;
-        overflow: hidden;
-    }
-
-    #overlay {
-        display: inline-flex;
-        flex-direction: column;
-        gap: 10px;
-        padding: 16px 20px;
-        background: rgba(15, 15, 20, 0.72);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        border-radius: 14px;
-        backdrop-filter: blur(6px);
-        color: #fff;
-        min-width: 320px;
-        transition: opacity 0.3s ease;
-    }
-
-    #overlay.hidden {
-        display: none;
-    }
-
-    /* ===== Fila Wins - Losses - Winrate ===== */
-    #stats-row {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 18px;
-    }
-
-    .stat-block {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        min-width: 60px;
-    }
-
-    .stat-value {
-        font-size: 26px;
-        font-weight: 800;
-        line-height: 1;
-    }
-
-    .stat-label {
-        font-size: 11px;
-        letter-spacing: 1px;
-        text-transform: uppercase;
-        opacity: 0.65;
-        margin-top: 4px;
-    }
-
-    #wins-value { color: #34d399; }
-    #losses-value { color: #f87171; }
-    #winrate-value { color: #facc15; }
-
-    .divider {
-        width: 1px;
-        height: 34px;
-        background: rgba(255, 255, 255, 0.15);
-    }
-
-    /* ===== Últimos 10 juegos ===== */
-    #history-row {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 6px;
-    }
-
-    .game-dot {
-        width: 22px;
-        height: 22px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 13px;
-        font-weight: bold;
-        flex-shrink: 0;
-    }
-
-    .game-dot.win {
-        background: rgba(52, 211, 153, 0.18);
-        border: 1.5px solid #34d399;
-        color: #34d399;
-    }
-
-    .game-dot.loss {
-        background: rgba(248, 113, 113, 0.18);
-        border: 1.5px solid #f87171;
-        color: #f87171;
-    }
-
-    .game-dot.empty {
-        background: rgba(255, 255, 255, 0.05);
-        border: 1.5px dashed rgba(255, 255, 255, 0.2);
-    }
-
-    /* ===== Racha ===== */
-    #streak-row {
-        text-align: center;
-        font-size: 13px;
-        font-weight: 600;
-        min-height: 16px;
-    }
-
-    #streak-row.win-streak { color: #34d399; }
-    #streak-row.loss-streak { color: #f87171; }
-
-    /* ===== Modo compacto ===== */
-    #overlay.compact {
-        padding: 10px 14px;
-        min-width: 260px;
-        gap: 6px;
-    }
-
-    #overlay.compact .stat-value { font-size: 18px; }
-    #overlay.compact .stat-label { font-size: 9px; }
-    #overlay.compact .divider { height: 24px; }
-    #overlay.compact .game-dot { width: 16px; height: 16px; font-size: 9px; }
-    #overlay.compact #streak-row { font-size: 11px; }
-</style>
+<link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
@@ -153,8 +25,10 @@
         </div>
     </div>
 
-    <div id="history-row"></div>
-    <div id="streak-row"></div>
+    <div id="last10-section">
+        <div id="history-row"></div>
+        <div id="streak-row"></div>
+    </div>
 </div>
 
 <script>
@@ -162,6 +36,7 @@
     const winsValue = document.getElementById("wins-value");
     const lossesValue = document.getElementById("losses-value");
     const winrateValue = document.getElementById("winrate-value");
+    const last10Section = document.getElementById("last10-section");
     const historyRow = document.getElementById("history-row");
     const streakRow = document.getElementById("streak-row");
 
@@ -223,6 +98,7 @@
 
             overlay.classList.toggle("compact", data.mode === "compact");
             overlay.classList.toggle("hidden", data.visible === false);
+            last10Section.classList.toggle("hidden", data.showLast10 !== true);
         } catch (e) {
             console.error("Error al obtener /settings:", e);
         }
