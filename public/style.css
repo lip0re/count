@@ -1,180 +1,130 @@
 body {
-
     margin: 0;
     background: transparent;
     font-family: Arial, sans-serif;
-
 }
 
-
 .overlay {
-
     display: flex;
     align-items: center;
     gap: 25px;
-
-    background: rgba(10,10,10,0.92);
-
+    background: rgba(10, 10, 10, 0.92);
     padding: 15px 20px;
-
     border-radius: 18px;
-
     width: fit-content;
-
-    box-shadow:
-    0 0 20px rgba(0,0,0,0.8);
-
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+    transition: all 0.3s ease; /* Transición suave para hide/compact */
 }
 
-/* Ejemplo de cómo ocultar el winrate en modo compacto */
-#overlay-container.compact .winrate-box {
-  display: none;
-}
-
-/* CIRCULO WINRATE */
+/* =========================================
+   CIRCULO WINRATE (Con diseño tipo Dona/Anillo)
+   ========================================= */
 
 .circle {
-
     width: 120px;
     height: 120px;
-
     border-radius: 50%;
-
-    background:
-    conic-gradient(
-        #00ff99 0%,
-        #ff3355 0%
-    );
-
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
-
-    color:white;
-
+    /* Gradient por defecto (se sobreescribe con el JavaScript en tiempo real) */
+    background: conic-gradient(#00ff99 0%, rgba(255, 255, 255, 0.1) 0%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    position: relative;
 }
 
+/* MÁSCARA CENTRO: Hace el hueco en el centro del círculo */
+.circle::before {
+    content: "";
+    position: absolute;
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background: #111111; /* Mismo color del fondo para recortar el centro */
+    z-index: 1;
+}
 
+/* El texto queda sobre la máscara centrada */
 .percent {
-
-    font-size:31px;
-
-    font-weight:900;
-
-    color:white;
-
+    position: relative;
+    z-index: 2;
+    font-size: 31px;
+    font-weight: 900;
+    color: white;
     text-shadow:
         -2px -2px 0 #000,
          2px -2px 0 #000,
         -2px  2px 0 #000,
          2px  2px 0 #000,
          0 0 10px rgba(255,255,255,0.4);
-
-    letter-spacing:1px;
-
+    letter-spacing: 1px;
 }
-
 
 .label {
-
-    font-size:13px;
-
-    font-weight:700;
-
-    color:#ffffff;
-
-    opacity:0.85;
-
-    text-shadow:
-        1px 1px 3px #000;
-
-    letter-spacing:2px;
-
+    position: relative;
+    z-index: 2;
+    font-size: 13px;
+    font-weight: 700;
+    color: #ffffff;
+    opacity: 0.85;
+    text-shadow: 1px 1px 3px #000;
+    letter-spacing: 2px;
 }
 
-
-
-/* PANEL DERECHA */
+/* =========================================
+   PANEL DERECHA (WINS Y LOSSES)
+   ========================================= */
 
 .stats {
-
-    display:flex;
-    flex-direction:column;
-    gap:10px;
-
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
-
 
 .stat {
-
-    background:#151515;
-
-    padding:8px 20px;
-
-    border-radius:10px;
-
-    min-width:100px;
-
-    color:white;
-
+    background: #151515;
+    padding: 8px 20px;
+    border-radius: 10px;
+    min-width: 100px;
+    color: white;
 }
-
 
 .stat span {
-
-    display:block;
-
-    font-size:13px;
-
-    color:#aaa;
-
+    display: block;
+    font-size: 13px;
+    color: #aaa;
 }
-
 
 .stat strong {
-
-    font-size:28px;
-
+    font-size: 28px;
 }
-
-
 
 /* COLORES */
 
 .win {
-
-    border-left:4px solid #00ff99;
-
+    border-left: 4px solid #00ff99;
 }
-
 
 .lose {
-
-    border-left:4px solid #ff3355;
-
+    border-left: 4px solid #ff3355;
 }
 
-/* Ocultar overlay */
+/* =========================================
+   MODOS Y VISIBILIDAD
+   ========================================= */
 
+/* Ocultar overlay (!hide) */
 .hidden {
-
-    display:none;
-
+    display: none !important;
 }
 
-
-/* Modo compacto */
-
-.compact .circle-container {
-
-    display:none;
-
+/* Modo compacto (!compact) */
+.overlay.compact .circle-container {
+    display: none;
 }
 
-
-.compact {
-
-    gap:10px;
-
+.overlay.compact {
+    gap: 10px;
+    padding: 10px 15px;
 }
