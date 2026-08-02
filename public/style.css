@@ -118,10 +118,12 @@ html, body {
 
 .last10-title {
     font-size: 9px;
-    letter-spacing: 0.8px;
     text-transform: uppercase;
-    opacity: 0.5;
     font-weight: 700;
+    opacity: 0.5;
+    text-align: center;
+    width: 100%;
+    display: block;
 }
 
 .streak-text {

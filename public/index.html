@@ -27,32 +27,37 @@
         </div>
     </div>
 
-    <!-- Modo !ult10: Stats compactas + 10 Círculos (mismo tamaño de caja) -->
-    <div id="last10-face" class="last10-face is-hidden">
-        <div class="last10-header">
-            <span class="streak-text" id="streak-text"></span>
-        </div>
-
-        <div class="last10-stats-row">
-            <div class="stat-block mini">
-                <div class="stat-value" data-field="wins">0</div>
-                <div class="stat-label">Wins</div>
-            </div>
-            <div class="divider mini"></div>
-            <div class="stat-block mini">
-                <div class="stat-value" data-field="losses">0</div>
-                <div class="stat-label">Losses</div>
-            </div>
-            <div class="divider mini"></div>
-            <div class="stat-block mini">
-                <div class="stat-value" data-field="winrate">0%</div>
-                <div class="stat-label">Winrate</div>
-            </div>
-        </div>
-
-        <div class="history-row" id="history-row"></div>
+<div id="last10-face" class="last10-face is-hidden">
+    <!-- Racha arriba si existe -->
+    <div class="last10-top">
+        <span class="streak-text" id="streak-text"></span>
     </div>
 
+    <!-- Fila de estadísticas mini -->
+    <div class="last10-stats-row">
+        <div class="stat-block mini">
+            <div class="stat-value" data-field="wins">0</div>
+            <div class="stat-label">Wins</div>
+        </div>
+        <div class="divider mini"></div>
+        <div class="stat-block mini">
+            <div class="stat-value" data-field="losses">0</div>
+            <div class="stat-label">Losses</div>
+        </div>
+        <div class="divider mini"></div>
+        <div class="stat-block mini">
+            <div class="stat-value" data-field="winrate">0%</div>
+            <div class="stat-label">Winrate</div>
+        </div>
+    </div>
+
+    <!-- Fila de los 10 círculos -->
+    <div class="history-row" id="history-row"></div>
+
+    <!-- Texto debajo de los círculos -->
+    <div class="last10-footer">
+        <span class="last10-title">Últimas 10 partidas</span>
+    </div>
 </div>
 
 <script>

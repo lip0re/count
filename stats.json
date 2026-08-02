@@ -1,5 +1,5 @@
 {
-  "wins": 7,
+  "wins": 9,
   "losses": 2,
   "history": [
     "win",
@@ -10,6 +10,8 @@
     "win",
     "win",
     "loss",
+    "win",
+    "win",
     "win"
   ]
 }

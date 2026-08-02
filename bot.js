@@ -142,14 +142,12 @@ client.on("message", (channel, tags, message, self) => {
         stats.wins++;
         agregarAlHistorial("win");
         guardarStats();
-        client.say(channel, `🏆 Win registrado! Total: ${stats.wins}`);
     }
 
     if (message === "!lose" && esAdmin) {
         stats.losses++;
         agregarAlHistorial("loss");
         guardarStats();
-        client.say(channel, `💀 Derrota registrada! Total: ${stats.losses}`);
     }
 
     if (message === "!rwin" && esAdmin) {
@@ -157,9 +155,6 @@ client.on("message", (channel, tags, message, self) => {
             stats.wins--;
             quitarDelHistorial("win");
             guardarStats();
-            client.say(channel, `↩️ Win eliminado. Total: ${stats.wins}`);
-        } else {
-            client.say(channel, `⚠️ No hay wins para eliminar`);
         }
     }
 
@@ -168,35 +163,27 @@ client.on("message", (channel, tags, message, self) => {
             stats.losses--;
             quitarDelHistorial("loss");
             guardarStats();
-            client.say(channel, `↩️ Loss eliminado. Total: ${stats.losses}`);
-        } else {
-            client.say(channel, `⚠️ No hay losses para eliminar`);
         }
     }
 
     if (message === "!full" && esAdmin) {
     overlaySettings.showLast10 = false;
-    client.say(channel, "🖥️ Overlay en modo normal activado");
     }
 
     if (message === "!compact" && esAdmin) {
     overlaySettings.mode = "compact";
     overlaySettings.showLast10 = false; // <-- AGREGAR ESTA LÍNEA
-    client.say(channel, "📦 Overlay compacto activado");
     }
 
     if (message === "!hide" && esAdmin) {
         overlaySettings.visible = false;
-        client.say(channel, "👻 Overlay oculto");
     }
 
     if (message === "!show" && esAdmin) {
         overlaySettings.visible = true;
-        client.say(channel, "👀 Overlay visible");
     }
 
     if (message === "!ult10" && esAdmin) {
     overlaySettings.showLast10 = true;
-    client.say(channel, "📊 Mostrando los últimos 10 juegos.");
     }
 });
