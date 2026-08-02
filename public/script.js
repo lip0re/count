@@ -38,8 +38,8 @@ async function actualizarStats() {
         const data = await res.json();
 
         actualizarValores(data);
-        actualizarCirculo(data);
-        renderHistory(data.last10); // <-- Asegúrate de que esta línea esté aquí
+        renderHistory(data.last10);
+        // ❌ Borra esta línea: renderStreak(data.streak);
     } catch (e) {
         console.error("Error al obtener /stats:", e);
     }
@@ -47,19 +47,7 @@ async function actualizarStats() {
 
 function renderStreak(streak) {
     if (!streakText) return;
-    streakText.className = "streak-text";
-    if (!streak || streak.count < 2) {
-        streakText.textContent = "";
-        return;
-    }
-
-    if (streak.tipo === "win") {
-        streakText.textContent = `🔥 ${streak.count} seguidas`;
-        streakText.classList.add("win-streak");
-    } else {
-        streakText.textContent = `❄️ ${streak.count} seguidas`;
-        streakText.classList.add("loss-streak");
-    }
+    streakText.textContent = ""; // Borra cualquier texto de racha
 }
 
 async function actualizarStats() {

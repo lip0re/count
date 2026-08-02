@@ -127,8 +127,7 @@ html, body {
 }
 
 .streak-text {
-    font-size: 10px;
-    font-weight: 700;
+    display: none !important;
 }
 
 .streak-text.win-streak { color: #34d399; }
