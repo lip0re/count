@@ -93,29 +93,28 @@ client.connect();
 // Comandos Twitch
 // =====================
 
-const esAdmin =
-    tags.username.toLowerCase() === (process.env.TWITCH_USERNAME || "").toLowerCase() ||
-    tags.mod === true ||
-    tags.badges?.broadcaster === "1";
+client.on("message", (channel, tags, message, self) => {
 
-    if(message === "!win" && esAdmin) {
+    if (self) return;
 
+    const esAdmin =
+        tags.username.toLowerCase() === (process.env.TWITCH_USERNAME || "").toLowerCase() ||
+        tags.mod === true ||
+        tags.badges?.broadcaster === "1";
+
+    if (message === "!win" && esAdmin) {
 
         stats.wins++;
 
         guardarStats();
 
-
         client.say(
             channel,
             `🏆 Win registrado! Total: ${stats.wins}`
         );
-
     }
 
-
-
-    if(message === "!lose" && esAdmin) {
+    if (message === "!lose" && esAdmin) {
 
 
         stats.losses++;
@@ -245,3 +244,5 @@ function guardarStats(){
 );
 
 }
+
+});
