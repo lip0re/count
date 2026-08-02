@@ -13,19 +13,19 @@ body {
     border-radius: 18px;
     width: fit-content;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
-    transition: all 0.3s ease; /* Transición suave para hide/compact */
+    transition: all 0.3s ease;
 }
 
 /* =========================================
-   CIRCULO WINRATE (Con diseño tipo Dona/Anillo)
+   CIRCULO WINRATE (Diseño tipo Anillo/Dona)
    ========================================= */
 
 .circle {
     width: 120px;
     height: 120px;
     border-radius: 50%;
-    /* Gradient por defecto (se sobreescribe con el JavaScript en tiempo real) */
-    background: conic-gradient(#00ff99 0%, rgba(255, 255, 255, 0.1) 0%);
+    /* Gradient administrado en tiempo real por JS */
+    background: conic-gradient(#00ff99 0%, #ff3355 0%);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -34,18 +34,17 @@ body {
     position: relative;
 }
 
-/* MÁSCARA CENTRO: Hace el hueco en el centro del círculo */
+/* Máscara Centro: recorta el círculo para simular una dona */
 .circle::before {
     content: "";
     position: absolute;
     width: 90px;
     height: 90px;
     border-radius: 50%;
-    background: #111111; /* Mismo color del fondo para recortar el centro */
+    background: #111111;
     z-index: 1;
 }
 
-/* El texto queda sobre la máscara centrada */
 .percent {
     position: relative;
     z-index: 2;

@@ -53,7 +53,7 @@ app.get("/settings", (req, res) => {
     res.json(overlaySettings);
 });
 
-// Un solo listen con el puerto dinámico de Railway
+// Puerto dinámico asignado por Railway
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Servidor iniciado en el puerto ${PORT}`);
@@ -73,7 +73,7 @@ const client = new tmi.Client({
 
 client.connect().catch(console.error);
 
-// Helper para guardar stats
+// Helper para guardar estadísticas en disco
 function guardarStats() {
     try {
         fs.writeFileSync(statsPath, JSON.stringify(stats, null, 2));
@@ -121,7 +121,7 @@ client.on("message", (channel, tags, message, self) => {
             guardarStats();
             client.say(channel, `↩️ Loss eliminado. Total: ${stats.losses}`);
         } else {
-            client.say(channel, `⚠️ No hay losses for eliminar`);
+            client.say(channel, `⚠️ No hay losses para eliminar`);
         }
     }
 

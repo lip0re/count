@@ -37,9 +37,6 @@
 
 </div>
 
-<!-- Si tienes codigo en script.js, lo mantiene cargado -->
-<script src="script.js"></script>
-
 <script>
   async function actualizarOverlay() {
     try {
@@ -55,19 +52,29 @@
       const winsEl = document.getElementById('wins');
       const lossesEl = document.getElementById('losses');
       const winrateEl = document.getElementById('winrate');
+      const circleEl = document.querySelector('.circle');
+
+      const winrateNum = parseFloat(stats.winrate) || 0;
 
       if (winsEl) winsEl.innerText = stats.wins;
       if (lossesEl) lossesEl.innerText = stats.losses;
       if (winrateEl) winrateEl.innerText = stats.winrate + '%';
 
+      // --- PINTAR AMBOS COLORES EN EL CÍRCULO ---
+      if (circleEl) {
+        circleEl.style.background = `conic-gradient(
+          #00ff99 0% ${winrateNum}%, 
+          #ff3355 ${winrateNum}% 100%
+        )`;
+      }
+
       // --- Aplicar Visibilidad (!hide / !show) ---
-      // Usamos 'overlay' que es el ID real de tu div principal
       const container = document.getElementById('overlay'); 
       if (container) {
         if (settings.visible === false) {
           container.style.display = 'none';
         } else {
-          container.style.display = ''; // Restaura el display por defecto del CSS (flex/block)
+          container.style.display = '';
         }
 
         // --- Aplicar Modos (!compact / !full) ---
